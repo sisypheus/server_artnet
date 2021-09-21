@@ -17,6 +17,8 @@ fastify.register(cors, {
   origin: true,
 });
 
+fastify.use(cors());
+
 class FirestoreClient {
   constructor() {
     this.db = new Firestore({

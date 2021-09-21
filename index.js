@@ -4,7 +4,8 @@ import Fastify from 'fastify';
 import * as cors from 'fastify-cors';
 import algoliasearch from 'algoliasearch'; 
 import { Firestore } from '@google-cloud/firestore';
-const path = require('path');
+//const path = require('path');
+import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -23,41 +24,23 @@ class FirestoreClient {
       keyFilename: path.join(path.resolve(), './service-account.json'),
     });
   }
+ 
+  async deleteRecursive(doc) {
+    this.db.recursiveDelete(doc).then(() => {
+      return true
+    }).catch((err) => {
+      return err
+    });
+  }
   
-  async fetchUserPosts(uid) {
-    return this.db.collection('posts')
-    .doc(uid)
-    .collection('userPosts')
-    .orderBy('created', 'desc')
-    .get()
-    .then(snapshot =>
-      snapshot  
-      )
-    }
-    
-    async fetchAllPosts() {
-      return this.db.collectionGroup('userPosts')
-      .orderBy('created', 'desc')
-      .get()
-      .then(snapshot => snapshot).catch(err => err);
-    }
-    
-    async deleteRecursive(doc) {
-      this.db.recursiveDelete(doc).then(() => {
-        return true
-      }).catch((err) => {
-        return err
-      });
-    }
-    
-    async updateUserData(doc) {
-      const userRef = this.db.doc(`users/${doc.uid}`);
-      return userRef.set(doc, { merge: true }).then(() => {
-        return userRef;
-      }).catch((err) => {
-        return err;
-      });
-    }
+  async updateUserData(doc) {
+    const userRef = this.db.doc(`users/${doc.uid}`);
+    return userRef.set(doc, { merge: true }).then(() => {
+      return userRef;
+    }).catch((err) => {
+      return err;
+    });
+  }
 }
   
 const store = new FirestoreClient();
@@ -85,17 +68,16 @@ fastify.delete('/delete/user/', async (req, res) => {
     res.code(200).send();
   }).catch(err => {
     console.log(err);
-    res.status(500).send(err);
+    res.code(500).send(err);
   });
 })
 
 fastify.delete('/delete/recursive/', async (req, res) => {
   const doc = store.db.doc(req.body.document);
-  console.log(doc);
   store.deleteRecursive(doc).then(() => {
-    res.status(200);
+    res.code(200).send();
   }).catch(err => {
-    res.status(404).send(err);
+    res.code(404).send(err);
   });
 });
 

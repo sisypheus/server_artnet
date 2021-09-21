@@ -58,11 +58,10 @@ class FirestoreClient {
         return err;
       });
     }
-  }
+}
   
 const store = new FirestoreClient();
 //fastify routes//
-
 
 fastify.post('/create/user', async (req, res) => {
   store.updateUserData(req.body).then((ref) => {
@@ -79,18 +78,21 @@ fastify.post('/create/user', async (req, res) => {
   });
 });
 
-fastify.delete('/delete/user/:user', async (req, res) => {
-  store.deleteRecursive(req.params.user).then(() => {
-    index.deleteObject(user.uid);
-    res.code(200);
+fastify.delete('/delete/user/', async (req, res) => {
+  const doc = store.db.doc(req.body.user);
+  store.deleteRecursive(doc).then(() => {
+    index.deleteObject(doc.id);
+    res.code(200).send();
   }).catch(err => {
     console.log(err);
-    res.code(500).send(err);
+    res.status(500).send(err);
   });
 })
 
-fastify.delete('/delete/recursive/:document', async (req, res) => {
-  store.deleteRecursive(req.params.document).then(() => {
+fastify.delete('/delete/recursive/', async (req, res) => {
+  const doc = store.db.doc(req.body.document);
+  console.log(doc);
+  store.deleteRecursive(doc).then(() => {
     res.status(200);
   }).catch(err => {
     res.status(404).send(err);

@@ -20,6 +20,7 @@
     "fastify-express": "^0.3.3",
     "fastify-plugin": "^3.0.0",
     "firebase": "^9.0.1",
-    "firebase-admin": "^9.11.1"
+    "firebase-admin": "^9.11.1",
+    "nodemon": "^2.0.12"
   }
 }

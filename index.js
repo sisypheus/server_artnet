@@ -17,8 +17,6 @@ fastify.register(cors, {
   origin: true,
 });
 
-fastify.use(cors());
-
 class FirestoreClient {
   constructor() {
     this.db = new Firestore({
@@ -49,6 +47,9 @@ const store = new FirestoreClient();
 //fastify routes//
 
 fastify.post('/create/user', async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Methods', 'POST');
   store.updateUserData(req.body).then((ref) => {
     const objectID = ref.id;
     const toIndex = req.body;

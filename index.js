@@ -104,6 +104,6 @@ fastify.get('/', () => {
   return 'Server is up and running';
 });
 
-fastify.listen(process.env.PORT || 3000, () => {
+fastify.listen(process.env.PORT || 3000, '0.0.0.0', () => {
   console.log(`server listening on port ${process.env.PORT || 3000}`);
 });

@@ -14,9 +14,11 @@ const algolia = algoliasearch(process.env.app_id, process.env.api_key);
 const index = algolia.initIndex('user_search');
 
 fastify.register(cors, {
-  origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  exposedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true,
+  preflight: false
 });
 
 class FirestoreClient {

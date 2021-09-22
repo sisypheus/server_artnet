@@ -13,34 +13,10 @@ const fastify = Fastify();
 const algolia = algoliasearch(process.env.app_id, process.env.api_key);
 const index = algolia.initIndex('user_search');
 
-// fastify.register(cors, {
-//   origin: true,
-// });
-
-fastify.register((fastify, options, done) => {
-  fastify.register((cors), {
-    origin: "*",
-    methods: ["POST"]
-  }),
-  fastify.route({
-    method: "POST",
-    url: "/create/user",
-    handler: async (req, res) => {
-      store.updateUserData(req.body).then((ref) => {
-        const objectID = ref.id;
-        const toIndex = req.body;
-        index.saveObject({
-          objectID,
-          ...toIndex,
-        }).catch(err => console.log(err));
-        res.code(200);
-      }).catch(err => {
-        console.log(err);
-        res.code(500).send(err);
-      });
-    }
-  });
-  done();
+fastify.register(cors, {
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
 });
 
 class FirestoreClient {
@@ -72,19 +48,19 @@ class FirestoreClient {
 const store = new FirestoreClient();
 //fastify routes//
 
-// fastify.post('/create/user', async (req, res) => {
-//   store.updateUserData(req.body).then((ref) => {
-//     const objectID = ref.id;
-//     const toIndex = req.body;
-//     index.saveObject({
-//       objectID,
-//       ...toIndex,
-//     }).catch(err => console.log(err));
-//     res.code(200);
-//   }).catch(err => {
-//     console.log(err);
-//     res.code(500).send(err);
-//   });
+fastify.post('/create/user', async (req, res) => {
+  store.updateUserData(req.body).then((ref) => {
+    const objectID = ref.id;
+    const toIndex = req.body;
+    index.saveObject({
+      objectID,
+      ...toIndex,
+    }).catch(err => console.log(err));
+    res.code(200);
+  }).catch(err => {
+    console.log(err);
+    res.code(500).send(err);
+  });
 // });
 
 fastify.delete('/delete/user/', async (req, res) => {

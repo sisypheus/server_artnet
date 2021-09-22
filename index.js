@@ -14,7 +14,7 @@ const algolia = algoliasearch(process.env.app_id, process.env.api_key);
 const index = algolia.initIndex('user_search');
 
 fastify.register(cors, {
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Content-Type'],
   exposedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Content-Type'],
   credentials: true,

@@ -41,6 +41,7 @@ class FirestoreClient {
     return userRef.set(doc, { merge: true }).then(() => {
       return userRef;
     }).catch((err) => {
+      console.log(err);
       return err;
     });
   }
@@ -53,6 +54,7 @@ fastify.post('/create/user', async (req, res) => {
   store.updateUserData(req.body).then((ref) => {
     const objectID = ref.id;
     const toIndex = req.body;
+    console.log(ref.id);
     index.saveObject({
       objectID,
       ...toIndex,

@@ -18,7 +18,6 @@ fastify.register(cors, {
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Content-Type'],
   exposedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Content-Type'],
   credentials: true,
-  preflight: false
 });
 
 class FirestoreClient {
@@ -58,10 +57,10 @@ fastify.post('/create/user', async (req, res) => {
       objectID,
       ...toIndex,
     }).catch(err => console.log(err));
-    res.code(200);
+    res.status(200).send();
   }).catch(err => {
     console.log(err);
-    res.code(500).send(err);
+    res.status(500).send(err);
   });
 });
 

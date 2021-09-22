@@ -61,7 +61,7 @@ fastify.post('/create/user', async (req, res) => {
     console.log(err);
     res.code(500).send(err);
   });
-// });
+});
 
 fastify.delete('/delete/user/', async (req, res) => {
   const doc = store.db.doc(req.body.user);
